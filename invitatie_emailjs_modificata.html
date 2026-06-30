@@ -1,0 +1,810 @@
+<!--
+  Invitație digitală — Majorat Roșu
+  ⚠️ ÎNAINTE DE TRIMITERE: verifică ora petrecerii (am pus 19:00 ca presupunere).
+-->
+<style>
+  :root{
+    --cream:#F5FBFA;
+    --cream-deep:#DFF3EE;
+    --magenta:#0EA8A0;
+    --magenta-deep:#0A6F68;
+    --coral:#1B4D8C;
+    --gold:#F6C945;
+    --purple-deep:#0B2A4A;
+    --ink:#0B2230;
+    --ink-soft:#4F6E74;
+    --blush:#CDEFE9;
+    --line: rgba(11,34,48,0.16);
+    font-family: 'Jost', sans-serif;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap');
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  .invite-root{
+    position:relative;
+    width:100%;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 900px 560px at 15% -8%, rgba(14,168,160,0.32), transparent 60%),
+      radial-gradient(ellipse 800px 560px at 105% 8%, rgba(246,201,69,0.40), transparent 55%),
+      radial-gradient(ellipse 700px 500px at 50% 70%, rgba(27,77,140,0.18), transparent 60%),
+      linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+    color: var(--ink);
+    overflow-x:hidden;
+  }
+
+  .invite-root *{ box-sizing:border-box; }
+
+  /* ---------- floating confetti dust ---------- */
+  .dust{
+    position:absolute; inset:0; pointer-events:none; z-index:1; overflow:hidden;
+  }
+  .dust span{
+    position:absolute;
+    width:6px; height:6px;
+    border-radius:50%;
+    opacity:0.6;
+    animation: floaty 11s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{ transform: translateY(0) translateX(0) scale(1); opacity:0.18;}
+    50%{ transform: translateY(-44px) translateX(14px) scale(1.3); opacity:0.85;}
+  }
+
+  /* ---------- envelope intro ---------- */
+  .envelope-screen{
+    position:fixed; inset:0; z-index:50;
+    display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(ellipse 700px 700px at 50% 30%, rgba(246,201,69,0.55), transparent 60%),
+                linear-gradient(160deg, var(--purple-deep) 0%, var(--magenta-deep) 55%, var(--coral) 100%);
+    cursor:pointer;
+    overflow:hidden;
+    transition: opacity 0.9s ease, visibility 0.9s ease;
+  }
+  .envelope-screen.opened{ opacity:0; visibility:hidden; }
+  .sparks{ position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .spark{
+    position:absolute;
+    border-radius:50%;
+    background:#FFF6DD;
+    animation: twinkle 2.4s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.15; transform:scale(0.7); }
+    50%{ opacity:1; transform:scale(1.15); }
+  }
+
+  .envelope{
+    position:relative;
+    width:min(78vw, 320px);
+    text-align:center;
+    color:#FFF6EC;
+  }
+  .seal{
+    width:92px; height:92px;
+    margin:0 auto 28px;
+    border-radius:50%;
+    background: conic-gradient(from 200deg, var(--gold), var(--magenta), var(--coral), var(--gold));
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-size:32px;
+    font-weight:600;
+    color:#fff;
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.12), 0 10px 34px rgba(10,111,104,0.55);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ transform: scale(1); box-shadow: 0 0 0 6px rgba(255,255,255,0.12), 0 10px 34px rgba(10,111,104,0.55); }
+    50%{ transform: scale(1.08); box-shadow: 0 0 0 10px rgba(255,255,255,0.16), 0 14px 44px rgba(246,201,69,0.65); }
+  }
+  .envelope h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size: clamp(20px, 5vw, 26px);
+    letter-spacing:0.02em;
+    margin-bottom:10px;
+  }
+  .envelope p{
+    font-size:14px;
+    opacity:0.9;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+
+  /* ---------- content ---------- */
+  .content{
+    position:relative; z-index:2;
+    max-width:640px;
+    margin:0 auto;
+    padding: 0 24px 80px;
+  }
+
+  section{
+    padding-top: 86px;
+  }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color: var(--magenta-deep);
+    font-weight:500;
+    margin-bottom:14px;
+    text-align:center;
+  }
+
+  /* hero */
+  .hero{
+    padding-top:90px;
+    text-align:center;
+  }
+  .hero .num{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size: clamp(110px, 34vw, 220px);
+    line-height:0.85;
+    background: linear-gradient(100deg, var(--magenta-deep) 0%, var(--coral) 30%, var(--gold) 50%, var(--magenta) 70%, var(--magenta-deep) 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer{
+    0%{ background-position: 0% 50%; }
+    100%{ background-position: 300% 50%; }
+  }
+  .hero .name{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size: clamp(26px, 6vw, 38px);
+    margin-top:-6px;
+    color: var(--ink);
+  }
+  .hero .tagline{
+    margin-top:18px;
+    font-size:16px;
+    color: var(--ink-soft);
+    max-width:380px;
+    margin-left:auto; margin-right:auto;
+    line-height:1.6;
+  }
+
+  .date-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-top:30px;
+    padding:10px 22px;
+    border:1px solid rgba(14,168,160,0.3);
+    border-radius:999px;
+    font-size:14px;
+    letter-spacing:0.04em;
+    background: rgba(255,255,255,0.6);
+  }
+  .date-pill b{ color:var(--magenta-deep); font-weight:600; }
+
+  /* countdown */
+  .countdown{
+    display:flex;
+    justify-content:center;
+    gap: clamp(10px,3vw,22px);
+    margin-top:46px;
+    flex-wrap:wrap;
+  }
+  .countdown .unit{
+    width: 74px;
+    text-align:center;
+  }
+  .countdown .ring{
+    position:relative;
+    width:74px; height:74px;
+    margin-bottom:8px;
+  }
+  .countdown svg{ transform: rotate(-90deg); overflow:visible; }
+  .countdown circle.bg{ fill:none; stroke: rgba(11,34,48,0.12); stroke-width:4; }
+  .countdown circle.fg{ fill:none; stroke: url(#ringGradient); stroke-width:5; stroke-linecap:round; transition: stroke-dashoffset 1s linear; filter: drop-shadow(0 0 5px rgba(14,168,160,0.55));}
+  .countdown .val{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:20px;
+    color: var(--magenta-deep);
+  }
+  .countdown .lbl{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* divider */
+  .divider{
+    width:1px; height:50px;
+    background: var(--line);
+    margin: 70px auto 0;
+  }
+
+  /* details card */
+  .card{
+    margin-top:36px;
+    background: rgba(255,255,255,0.55);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding: 30px 28px;
+    backdrop-filter: blur(6px);
+  }
+  .detail-row{
+    display:flex;
+    gap:16px;
+    align-items:flex-start;
+    padding: 16px 0;
+  }
+  .detail-row + .detail-row{ border-top:1px solid var(--line); }
+  .detail-row .icon{
+    width:38px; height:38px;
+    flex-shrink:0;
+    border-radius:50%;
+    background: var(--blush);
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px;
+  }
+  .detail-row h4{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:16px;
+    margin-bottom:4px;
+  }
+  .detail-row p{
+    font-size:14px;
+    color: var(--ink-soft);
+    line-height:1.55;
+  }
+  .map-link{
+    display:inline-block;
+    margin-top:8px;
+    font-size:13px;
+    color: var(--magenta-deep);
+    text-decoration:none;
+    border-bottom:1px solid currentColor;
+  }
+
+  /* dress code */
+  .dress-strip{
+    display:flex;
+    justify-content:center;
+    gap:28px;
+    margin-top:30px;
+    flex-wrap:wrap;
+  }
+  .dress-item{
+    text-align:center;
+    width:96px;
+  }
+  .dress-item .ic{
+    width:56px; height:56px;
+    border-radius:50%;
+    background: rgba(246,201,69,0.22);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+    margin:0 auto 10px;
+  }
+  .dress-item span{
+    font-size:12.5px;
+    color: var(--ink-soft);
+    line-height:1.4;
+    display:block;
+  }
+  .dress-note{
+    text-align:center;
+    margin-top:26px;
+    font-size:14px;
+    color: var(--ink-soft);
+    max-width:360px;
+    margin-left:auto; margin-right:auto;
+    line-height:1.6;
+  }
+
+  /* rsvp */
+  .rsvp-card{
+    margin-top:36px;
+  }
+  .field{ margin-bottom:18px; }
+  .field label{
+    display:block;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .field input[type=text]{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background: rgba(255,255,255,0.7);
+    font-family:'Jost', sans-serif;
+    font-size:15px;
+    color: var(--ink);
+    outline:none;
+  }
+  .field input[type=text]:focus{
+    border-color: var(--magenta);
+    box-shadow: 0 0 0 3px rgba(14,168,160,0.18);
+  }
+  .toggle-row{
+    display:flex; gap:10px;
+  }
+  .toggle-btn{
+    flex:1;
+    padding:12px 0;
+    text-align:center;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background: rgba(255,255,255,0.5);
+    font-size:14px;
+    cursor:pointer;
+    transition: all 0.2s ease;
+    color: var(--ink);
+  }
+  .toggle-btn:focus-visible{ outline:2px solid var(--magenta); outline-offset:2px; }
+  .toggle-btn.active{
+    background: linear-gradient(135deg, var(--magenta), var(--coral));
+    border-color: transparent;
+    color:#fff;
+  }
+  .submit-btn{
+    width:100%;
+    padding:15px 0;
+    margin-top:8px;
+    border:none;
+    border-radius:10px;
+    background: linear-gradient(120deg, var(--magenta-deep), var(--magenta) 45%, var(--coral) 75%, var(--gold));
+    background-size:220% 100%;
+    color:#fff;
+    font-family:'Jost', sans-serif;
+    font-size:15px;
+    font-weight:500;
+    letter-spacing:0.03em;
+    cursor:pointer;
+    box-shadow: 0 8px 22px rgba(10,111,104,0.35);
+    transition: transform 0.15s ease, background-position 0.4s ease, opacity 0.15s ease;
+  }
+  .submit-btn:hover{ transform: translateY(-1px); background-position:100% 0; }
+  .submit-btn:disabled{ opacity:0.45; cursor:default; transform:none; box-shadow:none; }
+  .deadline{
+    text-align:center;
+    font-size:12.5px;
+    color: var(--ink-soft);
+    margin-top:14px;
+  }
+  .rsvp-status{
+    text-align:center;
+    margin-top:16px;
+    font-size:14px;
+    min-height:20px;
+    color: var(--magenta-deep);
+    font-weight:500;
+  }
+
+  /* footer */
+  footer{
+    text-align:center;
+    margin-top:80px;
+    padding-top:30px;
+    border-top:1px solid var(--line);
+  }
+  footer .sig{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:18px;
+    background: linear-gradient(100deg, var(--magenta-deep), var(--coral));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    user-select:none;
+    cursor:default;
+  }
+  footer .sub{
+    margin-top:8px;
+    font-size:12px;
+    color: var(--ink-soft);
+    letter-spacing:0.04em;
+  }
+
+  .guest-list{
+    margin-top:18px;
+    font-size:12.5px;
+    color: var(--ink-soft);
+    max-width:320px;
+    margin-left:auto; margin-right:auto;
+    line-height:1.7;
+  }
+
+  .confetti-piece{
+    position:fixed;
+    top:0; left:0;
+    width:8px; height:8px;
+    pointer-events:none;
+    z-index:100;
+    border-radius:2px;
+  }
+
+  .icn{ width:18px; height:18px; display:inline-block; vertical-align:middle; }
+  .detail-row .icon .icn{ width:20px; height:20px; color: var(--magenta-deep); }
+  .dress-item .ic .icn{ width:24px; height:24px; color: var(--magenta-deep); }
+  .date-pill .icn{ width:14px; height:14px; color: var(--magenta-deep); flex-shrink:0; }
+  .btn-icn{ width:15px; height:15px; vertical-align:-2px; margin-right:5px; display:inline-block; }
+  footer .sig .icn{ width:14px; height:14px; vertical-align:-1px; margin-left:4px; color: var(--magenta-deep); }
+
+  @media (prefers-reduced-motion: reduce){
+    .seal, .dust span, .spark, .hero .num{ animation:none !important; }
+  }
+</style>
+
+<div class="invite-root" id="inviteRoot">
+
+  <svg width="0" height="0" style="position:absolute;">
+    <defs>
+      <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0EA8A0"/>
+        <stop offset="100%" stop-color="#F6C945"/>
+      </linearGradient>
+
+      <symbol id="icon-pin" viewBox="0 0 24 24"><path d="M12 21s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+
+      <symbol id="icon-house" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+
+      <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5V12l3.2 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+
+      <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 6.5 12 13l7.5-6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+
+      <symbol id="icon-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 4.5-13 14-13 0 9.5-5 14-14 13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 19c3-4 6-6.5 10.5-10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+
+      <symbol id="icon-glass" viewBox="0 0 24 24"><path d="M6 4h12l-5.2 8v6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12.8 12 18 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M9 19h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6.4 6.5h11.2" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+
+      <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="13" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 4.5v2M12 20.5v-1.2M4.8 13H6M18 13h1.2M6.8 7.3l1 1M16.2 8.3l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+
+      <symbol id="icon-sandal" viewBox="0 0 24 24"><ellipse cx="12" cy="14.5" rx="6.5" ry="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 10.5C9 8.5 15 8.5 16.5 10.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 8.5v2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+
+      <symbol id="icon-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3z" fill="currentColor"/></symbol>
+
+      <symbol id="icon-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-9.8-9.3C.7 7 2.6 4 6 4c2 0 3.6 1.2 4.5 2.7C11.4 5.2 13 4 15 4c3.4 0 5.3 3 4.8 6.7C17.5 15.4 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="envelope-screen" id="envelopeScreen">
+    <div class="sparks" id="sparks"></div>
+    <div class="envelope">
+      <div class="seal">18</div>
+      <h2>Ai o invitație</h2>
+      <p>Atinge sigiliul pentru a o deschide</p>
+    </div>
+  </div>
+
+  <div class="dust" id="dust"></div>
+
+  <div class="content">
+
+    <section class="hero">
+      <div class="eyebrow">Te invit la</div>
+      <div class="num">18</div>
+      <div class="name">Roșu</div>
+      <p class="tagline">O seară de vară, acasă, cu oamenii care contează cel mai mult. Vino să sărbătorim împreună.</p>
+      <div class="date-pill"><svg class="icn"><use href="#icon-pin"/></svg> <b>1 August</b> &nbsp;·&nbsp; ora <b id="partyTime">19:00</b></div>
+
+      <div class="countdown" id="countdown">
+        <div class="unit">
+          <div class="ring">
+            <svg width="74" height="74"><circle class="bg" cx="37" cy="37" r="32"/><circle class="fg" id="ringDays" cx="37" cy="37" r="32"/></svg>
+            <div class="val" id="valDays">--</div>
+          </div>
+          <div class="lbl">zile</div>
+        </div>
+        <div class="unit">
+          <div class="ring">
+            <svg width="74" height="74"><circle class="bg" cx="37" cy="37" r="32"/><circle class="fg" id="ringHours" cx="37" cy="37" r="32"/></svg>
+            <div class="val" id="valHours">--</div>
+          </div>
+          <div class="lbl">ore</div>
+        </div>
+        <div class="unit">
+          <div class="ring">
+            <svg width="74" height="74"><circle class="bg" cx="37" cy="37" r="32"/><circle class="fg" id="ringMin" cx="37" cy="37" r="32"/></svg>
+            <div class="val" id="valMin">--</div>
+          </div>
+          <div class="lbl">minute</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="details">
+      <div class="eyebrow">Detalii</div>
+      <div class="card">
+        <div class="detail-row">
+          <div class="icon"><svg class="icn"><use href="#icon-house"/></svg></div>
+          <div>
+            <h4>Locația</h4>
+            <p>Reședința Roșu<br>Str. Podgoriei, Nr. 43, Jariștea</p>
+            <a class="map-link" id="mapLink" href="#" target="_blank" rel="noopener">Deschide harta →</a>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="icon"><svg class="icn"><use href="#icon-clock"/></svg></div>
+          <div>
+            <h4>Ora</h4>
+            <p>Vă aștept de la ora <span id="partyTime2">19:00</span>, până dimineața dacă verile sunt scurte.</p>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="icon"><svg class="icn"><use href="#icon-mail"/></svg></div>
+          <div>
+            <h4>Confirmare</h4>
+            <p>Te rog confirmă prezența mai jos până cel târziu pe <b>15 iulie</b>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="dresscode">
+      <div class="eyebrow">Ținuta serii</div>
+      <div style="text-align:center;">
+        <div class="name" style="font-size:24px;">Summer chic</div>
+      </div>
+      <div class="dress-strip">
+        <div class="dress-item">
+          <div class="ic"><svg class="icn"><use href="#icon-leaf"/></svg></div>
+          <span>Materiale ușoare</span>
+        </div>
+        <div class="dress-item">
+          <div class="ic"><svg class="icn"><use href="#icon-glass"/></svg></div>
+          <span>Lejer, dar îngrijit</span>
+        </div>
+        <div class="dress-item">
+          <div class="ic"><svg class="icn"><use href="#icon-sun"/></svg></div>
+          <span>Tonuri calde</span>
+        </div>
+        <div class="dress-item">
+          <div class="ic"><svg class="icn"><use href="#icon-sandal"/></svg></div>
+          <span>Încălțăminte comodă</span>
+        </div>
+      </div>
+      <p class="dress-note">Gândește-te la apusul de vară, nimic rigid, totul cald și ușor. Exact starea pe care vreau să o avem toată seara.</p>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="rsvp">
+      <div class="eyebrow">Confirmă prezența</div>
+      <div class="card rsvp-card">
+        <div class="field">
+          <label for="guestName">Numele tău</label>
+          <input type="text" id="guestName" placeholder="Cum te trec pe listă?">
+        </div>
+        <div class="field">
+          <label>Vii?</label>
+          <div class="toggle-row" id="attendToggle">
+            <div class="toggle-btn" data-val="yes" tabindex="0"><svg class="icn btn-icn"><use href="#icon-spark"/></svg>Da, vin</div>
+            <div class="toggle-btn" data-val="no" tabindex="0">Din păcate nu</div>
+          </div>
+        </div>
+        <div class="field" id="partnerField" style="display:none;">
+          <label>Vii cu un partener?</label>
+          <div class="toggle-row" id="partnerToggle">
+            <div class="toggle-btn" data-val="yes" tabindex="0">Da</div>
+            <div class="toggle-btn" data-val="no" tabindex="0">Nu, vin singur/ă</div>
+          </div>
+        </div>
+        <button class="submit-btn" id="submitRsvp" disabled>Trimite confirmarea</button>
+        <div class="rsvp-status" id="rsvpStatus"></div>
+        <div class="deadline">Termen confirmare: 15 iulie</div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="sig" id="footerSig">Cu drag, te aștept <svg class="icn"><use href="#icon-heart"/></svg></div>
+    </footer>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function () {
+    emailjs.init({
+        publicKey: "1QdgbFmi_Ge5WkGnN",
+    });
+})();
+</script>
+
+<script>
+(function(){
+  const root = document.getElementById('inviteRoot');
+
+  const RSVP_EMAIL = "rosuemanuel839@gmail.com";
+
+  // ---- floating confetti dust ----
+  const dust = document.getElementById('dust');
+  const dustColors = ['#0EA8A0', '#F6C945', '#1B4D8C', '#0A6F68'];
+  for(let i=0;i<24;i++){
+    const s = document.createElement('span');
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.background = dustColors[i % dustColors.length];
+    s.style.animationDelay = (Math.random()*8)+'s';
+    s.style.animationDuration = (8+Math.random()*8)+'s';
+    dust.appendChild(s);
+  }
+
+  // ---- sparkles on the envelope screen ----
+  const sparks = document.getElementById('sparks');
+  for(let i=0;i<18;i++){
+    const sp = document.createElement('div');
+    sp.className = 'spark';
+    const size = 2 + Math.random()*3;
+    sp.style.width = size+'px';
+    sp.style.height = size+'px';
+    sp.style.left = Math.random()*100+'%';
+    sp.style.top = Math.random()*100+'%';
+    sp.style.animationDelay = (Math.random()*2.4)+'s';
+    sparks.appendChild(sp);
+  }
+
+  // ---- envelope open ----
+  const envelope = document.getElementById('envelopeScreen');
+  envelope.addEventListener('click', () => envelope.classList.add('opened'));
+  envelope.addEventListener('keypress', (e)=>{ if(e.key==='Enter') envelope.classList.add('opened'); });
+
+  // ---- map link ----
+  const address = "Reședința Roșu, Str. Podgoriei, Nr 43, Jariștea";
+  document.getElementById('mapLink').href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+
+  // ---- countdown ----
+  const PARTY_DATE = new Date("2026-08-01T19:00:00");
+  const R = 32, CIRC = 2*Math.PI*R;
+  ["ringDays","ringHours","ringMin"].forEach(id=>{
+    const c = document.getElementById(id);
+    c.style.strokeDasharray = CIRC;
+  });
+
+  function setRing(id, fraction){
+    const c = document.getElementById(id);
+    const offset = CIRC * (1 - Math.max(0,Math.min(1,fraction)));
+    c.style.strokeDashoffset = offset;
+  }
+
+  function tick(){
+    const now = new Date();
+    let diff = PARTY_DATE - now;
+    if(diff < 0) diff = 0;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const mins = Math.floor((diff / (1000*60)) % 60);
+
+    document.getElementById('valDays').textContent = days;
+    document.getElementById('valHours').textContent = hours;
+    document.getElementById('valMin').textContent = mins;
+
+    setRing('ringDays', days / 31);
+    setRing('ringHours', hours / 24);
+    setRing('ringMin', mins / 60);
+  }
+  tick();
+  setInterval(tick, 1000*30);
+
+  // ---- RSVP form ----
+  let attendVal = null, partnerVal = null;
+  const attendToggle = document.getElementById('attendToggle');
+  const partnerToggle = document.getElementById('partnerToggle');
+  const partnerField = document.getElementById('partnerField');
+  const submitBtn = document.getElementById('submitRsvp');
+  const status = document.getElementById('rsvpStatus');
+  const nameInput = document.getElementById('guestName');
+
+  function refreshSubmit(){
+    const nameOk = nameInput.value.trim().length > 0;
+    const attendOk = attendVal !== null;
+    const partnerOk = attendVal === 'no' || partnerVal !== null;
+    submitBtn.disabled = !(nameOk && attendOk && partnerOk);
+  }
+
+  attendToggle.querySelectorAll('.toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      attendToggle.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      attendVal = btn.dataset.val;
+      partnerField.style.display = attendVal === 'yes' ? 'block' : 'none';
+      if(attendVal === 'no'){ partnerVal = null; partnerToggle.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active')); }
+      refreshSubmit();
+    });
+  });
+  partnerToggle.querySelectorAll('.toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      partnerToggle.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      partnerVal = btn.dataset.val;
+      refreshSubmit();
+    });
+  });
+  nameInput.addEventListener('input', refreshSubmit);
+
+  // ---- confetti burst ----
+  function burstConfetti(originEl){
+    const rect = originEl.getBoundingClientRect();
+    const cx = rect.left + rect.width/2;
+    const cy = rect.top + rect.height/2;
+    const colors = ['#0EA8A0', '#F6C945', '#1B4D8C', '#0A6F68', '#0B2A4A'];
+    for(let i=0;i<26;i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.background = colors[i % colors.length];
+      piece.style.left = cx+'px';
+      piece.style.top = cy+'px';
+      const angle = Math.random()*Math.PI*2;
+      const dist = 80 + Math.random()*140;
+      const tx = Math.cos(angle)*dist;
+      const ty = Math.sin(angle)*dist - 40;
+      const rot = Math.random()*360;
+      piece.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${tx}px, ${ty}px) rotate(${rot}deg)`, opacity: 0 }
+      ], { duration: 900 + Math.random()*500, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      document.body.appendChild(piece);
+      setTimeout(()=> piece.remove(), 1500);
+    }
+  }
+
+  submitBtn.addEventListener('click', () => {
+
+    const name = nameInput.value.trim();
+    const attending = attendVal === 'yes' ? 'Da' : 'Nu';
+    const partner = attendVal === 'yes'
+        ? (partnerVal === 'yes' ? 'Da' : 'Nu')
+        : '-';
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Se trimite...";
+
+    emailjs.send(
+        "service_o8lz24m",
+        "template_zy7njzr",
+        {
+            name: name,
+            attending: attending,
+            partner: partner
+        }
+    )
+    .then(() => {
+
+        status.textContent = "✔ Confirmarea a fost trimisă cu succes!";
+
+        if(attendVal === "yes"){
+            burstConfetti(submitBtn);
+        }
+
+        submitBtn.textContent = "Confirmare trimisă";
+
+    })
+    .catch((error) => {
+
+        console.error(error);
+
+        status.textContent = "❌ A apărut o eroare. Încearcă din nou.";
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Trimite confirmarea";
+
+    });
+
+  });
+})();
+</script>
